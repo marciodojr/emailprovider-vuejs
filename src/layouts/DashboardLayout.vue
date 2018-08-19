@@ -42,7 +42,9 @@
       <v-btn depressed large color="primary" @click="logout"><v-icon>exit_to_app</v-icon> Sair</v-btn>
     </v-toolbar>
     <v-content>
-      <router-view></router-view>
+      <v-slide-x-transition mode="out-in">
+        <router-view></router-view>
+      </v-slide-x-transition>
     </v-content>
   </v-app>
 </template>

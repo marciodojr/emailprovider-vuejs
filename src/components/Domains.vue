@@ -1,75 +1,84 @@
 <template>
   <v-container fluid>
-    <v-slide-y-transition mode="out-in">
-      <v-layout column>
-        <template>
-          <v-card>
-            <v-card-title>
-              <v-icon class="mr-2">domain</v-icon> Domínios
-              <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-card-title>
-            <v-data-table
-              v-model="selected"
-              :headers="headers"
-              :items="domains"
-              :pagination.sync="pagination"
-              :rows-per-page-items="[10, 20, 50, 100]"
-              :search="search"
-              select-all
-              item-key="id"
-              class="elevation-1"
-            >
-              <template slot="headers" slot-scope="props">
-                <tr>
-                  <th>
-                    <v-checkbox
-                      :input-value="props.all"
-                      :indeterminate="props.indeterminate"
-                      primary
-                      hide-details
-                      @click.native="toggleAll"
-                    ></v-checkbox>
-                  </th>
-                  <th
-                    v-for="header in props.headers"
-                    :key="header.text"
-                    :class="['column sortable text-xs-left', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                    @click="changeSort(header.value)"
-                  >
-                    {{ header.text }}
-                    <v-icon small>arrow_upward</v-icon>
-                  </th>
-                </tr>
-              </template>
-              <!-- BODY -->
-              <template slot="items" slot-scope="props">
-                <tr :active="props.selected" @click="props.selected = !props.selected" class="mouse-pointer">
-                  <td>
-                    <v-checkbox
-                      :input-value="props.selected"
-                      primary
-                      hide-details
-                    ></v-checkbox>
-                  </td>
-                  <td class="text-xs-left">{{ props.item.id }}</td>
-                  <td class="text-xs-left">{{ props.item.name }}</td>
-                </tr>
-              </template>
-              <p slot="no-results" :value="true" class="text-xs-center">
-                Não há resultados para "{{ search }}".
-              </p>
-            </v-data-table>
-          </v-card>
-        </template>
-      </v-layout>
-    </v-slide-y-transition>
+    <v-layout row justify-end>
+      <v-btn fab small dark color="primary">
+        <v-icon dark>add</v-icon>
+      </v-btn>
+      <v-btn fab small dark color="warning">
+        <v-icon dark>edit</v-icon>
+      </v-btn>
+      <v-btn fab small dark color="error">
+        <v-icon dark>remove</v-icon>
+      </v-btn>
+    </v-layout>
+    <v-layout column>
+      <template>
+        <v-card>
+          <v-card-title>
+            <v-icon class="mr-2">domain</v-icon> Domínios
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            v-model="selected"
+            :headers="headers"
+            :items="domains"
+            :pagination.sync="pagination"
+            :rows-per-page-items="[10, 20, 50, 100]"
+            :search="search"
+            select-all
+            item-key="id"
+            class="elevation-1"
+          >
+            <template slot="headers" slot-scope="props">
+              <tr>
+                <th>
+                  <v-checkbox
+                    :input-value="props.all"
+                    :indeterminate="props.indeterminate"
+                    primary
+                    hide-details
+                    @click.native="toggleAll"
+                  ></v-checkbox>
+                </th>
+                <th
+                  v-for="header in props.headers"
+                  :key="header.text"
+                  :class="['column sortable text-xs-left', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                  @click="changeSort(header.value)"
+                >
+                  {{ header.text }}
+                  <v-icon small>arrow_upward</v-icon>
+                </th>
+              </tr>
+            </template>
+            <!-- BODY -->
+            <template slot="items" slot-scope="props">
+              <tr :active="props.selected" @click="props.selected = !props.selected" class="mouse-pointer">
+                <td>
+                  <v-checkbox
+                    :input-value="props.selected"
+                    primary
+                    hide-details
+                  ></v-checkbox>
+                </td>
+                <td class="text-xs-left">{{ props.item.id }}</td>
+                <td class="text-xs-left">{{ props.item.name }}</td>
+              </tr>
+            </template>
+            <p slot="no-results" :value="true" class="text-xs-center">
+              Não há resultados para "{{ search }}".
+            </p>
+          </v-data-table>
+        </v-card>
+      </template>
+    </v-layout>
   </v-container>
 </template>
 
