@@ -74,6 +74,7 @@ export default {
   },
   methods: {
     logout() {
+      this.$storage.commit('setAuthToken', '');
       this.$router.push('/');
     }
   }
