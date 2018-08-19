@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
     <v-layout row justify-end>
-      <v-btn fab small dark color="primary" @click="openNewEmailModal">
+      <v-btn fab small dark color="primary" @click="newEmailDialog=true">
         <v-icon dark>add</v-icon>
       </v-btn>
-      <v-btn fab small dark color="error">
+      <v-btn fab small dark color="error" @click="deleteEmailDialog=true">
         <v-icon dark>remove</v-icon>
       </v-btn>
     </v-layout>
@@ -74,45 +74,12 @@
             </p>
           </v-data-table>
         </v-card>
-        <v-dialog v-model="openEmailModal" max-width="500px">
-          <v-card>
-            <v-card-title>
-              <span><v-icon class="mr-2">how_to_reg</v-icon> Novo E-mail</span>
-              <v-spacer></v-spacer>
-              <v-btn slot="activator" icon @click="closeNewEmailModal">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-card-title>
-            <v-card-text>
-              <v-select
-                :items="domains"
-                label="Escolha o domínio"
-                item-text="name"
-                item-value="id"
-                v-model="selectedDomain"
-              ></v-select>
-            </v-card-text>
-            <v-card-text>
-              <v-text-field
-                v-model="emailChosen"
-                label="E-mail"
-                :suffix="selectedDomainName"
-              ></v-text-field>
-            </v-card-text>
-            <v-card-text>
-              <v-text-field
-                v-model="passwordChosen"
-                label="Senha"
-                type="password"
-              ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" flat @click.stop="saveNewEmail">Salvar</v-btn>
-              <v-btn color="error" flat @click.stop="closeNewEmailModal">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <new-email-dialog :isopen="newEmailDialog" @newEmailSaved="newEmailDialog=false" @newEmailCancelled="newEmailDialog=false" />
+        <delete-email-dialog
+          :isopen="deleteEmailDialog"
+          :emails="selectedEmails"
+          @emailsRemoved="deleteEmailDialog=false"
+          @removeEmailsCancelled="deleteEmailDialog=false" />
       </template>
     </v-layout>
   </v-container>
@@ -120,9 +87,15 @@
 
 <script>
 import API from "./../services/ApiService";
+import NewEmailDialog from "./dialogs/NewEmailDialog";
+import DeleteEmailDialog from "./dialogs/DeleteEmailDialog";
 
 export default {
   name: "emails",
+  components: {
+    NewEmailDialog,
+    DeleteEmailDialog
+  },
   data() {
     return {
       search: "",
@@ -132,11 +105,9 @@ export default {
       selected: [],
       headers: [{ text: "#", value: "id" }, { text: "Domínio", value: "name" }],
       emails: [],
-      openEmailModal: false,
-      selectedDomain: null,
-      emailChosen: null,
-      passwordChosen: null,
-      domains: []
+      newEmailDialog: false,
+      deleteEmailDialog: false,
+      selectedEmails: ['email1@gmail.com', 'email2@gmail.com']
     };
   },
   methods: {
@@ -151,32 +122,6 @@ export default {
         this.pagination.sortBy = column;
         this.pagination.descending = false;
       }
-    },
-    openNewEmailModal() {
-
-      // @todo buscar os domínios do servidor
-      this.domains = [
-        {'id': 10, 'name': 'incluirtecnologia.com.br'},
-        {'id': 1, 'name': 'incluirtecnologia2.com.br'},
-        {'id': 3, 'name': 'incluirtecnologia3.com.br'},
-        {'id': 5, 'name': 'incluirtecnologia4.com.br'}
-      ];
-      this.openEmailModal = true;
-    },
-    closeNewEmailModal() {
-      this.openEmailModal = false;
-    },
-    saveNewEmail() {
-      this.openEmailModal = false;
-    }
-  },
-  computed: {
-    selectedDomainName() {
-      if(!this.selectedDomain) {
-        return '@...';
-      }
-
-      return '@' + this.domains[this.domains.findIndex(d => d.id === this.selectedDomain)].name;
     }
   },
   created() {
