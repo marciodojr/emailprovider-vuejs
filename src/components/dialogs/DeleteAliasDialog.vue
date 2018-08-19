@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
             <v-card-title>
-                <span><v-icon class="mr-2">how_to_reg</v-icon> Remover E-mails</span>
+                <span><v-icon class="mr-2">supervisor_account</v-icon> Remover Alias</span>
                 <v-spacer></v-spacer>
                 <v-btn slot="activator" icon @click="cancel">
                 <v-icon>close</v-icon>
@@ -10,10 +10,10 @@
             </v-card-title>
             <v-card-text>
               <v-card class="elevation-0">
-                <v-card-title class="subheading">Os seguintes emails serão removidos: </v-card-title>
+                <v-card-title class="subheading">Os seguintes aliases serão removidos: </v-card-title>
                 <v-list dense>
-                  <v-list-tile v-for="(email, idx) in emails" :key="idx">
-                    <v-list-tile-content>{{email}}</v-list-tile-content>
+                  <v-list-tile v-for="(alias, idx) in aliases" :key="idx">
+                    <v-list-tile-content>{{alias}}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-card>
@@ -30,7 +30,7 @@
 export default {
   props: {
     isopen: Boolean,
-    emails: Array
+    aliases: Array
   },
   data() {
     return {
@@ -53,7 +53,8 @@ export default {
       // changes from parent
       this.dialog = this.isopen;
     },
-    dialog() { // changes from child
+    dialog() {
+      // changes from child
       if (!this.dialog) {
         this.cancel();
       }

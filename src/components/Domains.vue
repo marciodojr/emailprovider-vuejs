@@ -1,13 +1,13 @@
 <template>
   <v-container fluid>
     <v-layout row justify-end>
-      <v-btn fab small dark color="primary">
+      <v-btn fab small dark color="primary" @click="newDomainDialog=true">
         <v-icon dark>add</v-icon>
       </v-btn>
-      <v-btn fab small dark color="warning">
+      <v-btn fab small dark color="warning" @click="editDomainDialog=true">
         <v-icon dark>edit</v-icon>
       </v-btn>
-      <v-btn fab small dark color="error">
+      <v-btn fab small dark color="error" @click="deleteDomainDialog=true">
         <v-icon dark>remove</v-icon>
       </v-btn>
     </v-layout>
@@ -77,17 +77,39 @@
             </p>
           </v-data-table>
         </v-card>
+        <new-domain-dialog
+          :isopen="newDomainDialog"
+          @accept="newDomainDialog=false"
+          @cancel="newDomainDialog=false"
+          />
+        <edit-domain-dialog
+          :isopen="editDomainDialog" :domain="{id: 1, name: 'dominiolegal.com.br'}"
+          @accept="editDomainDialog=false"
+          @cancel="editDomainDialog=false"
+          />
+        <delete-domain-dialog
+          :isopen="deleteDomainDialog" :domain="'dominiolegal.com.br'"
+          @accept="deleteDomainDialog=false"
+          @cancel="deleteDomainDialog=false"
+          />
       </template>
     </v-layout>
   </v-container>
 </template>
-
 <script>
 
 import API from './../services/ApiService';
+import NewDomainDialog from './dialogs/NewDomainDialog';
+import EditDomainDialog from './dialogs/EditDomainDialog';
+import DeleteDomainDialog from './dialogs/DeleteDomainDialog';
 
 export default {
   name: "domains",
+  components: {
+    NewDomainDialog,
+    EditDomainDialog,
+    DeleteDomainDialog
+  },
   data() {
     return {
       search: "",
@@ -99,7 +121,10 @@ export default {
         { text: "#", value: "id" },
         { text: "Domínio", value: "name" }
       ],
-      domains: []
+      domains: [],
+      newDomainDialog: false,
+      editDomainDialog: false,
+      deleteDomainDialog: false
     };
   },
   methods: {

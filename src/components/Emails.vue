@@ -74,12 +74,17 @@
             </p>
           </v-data-table>
         </v-card>
-        <new-email-dialog :isopen="newEmailDialog" @newEmailSaved="newEmailDialog=false" @newEmailCancelled="newEmailDialog=false" />
+        <new-email-dialog
+          :isopen="newEmailDialog"
+          @accept="newEmailDialog=false"
+          @cancel="newEmailDialog=false"
+        />
         <delete-email-dialog
           :isopen="deleteEmailDialog"
           :emails="selectedEmails"
-          @emailsRemoved="deleteEmailDialog=false"
-          @removeEmailsCancelled="deleteEmailDialog=false" />
+          @accept="deleteEmailDialog=false"
+          @cancel="deleteEmailDialog=false"
+          />
       </template>
     </v-layout>
   </v-container>

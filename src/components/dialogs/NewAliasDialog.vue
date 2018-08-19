@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
             <v-card-title>
-                <span><v-icon class="mr-2">how_to_reg</v-icon> Novo E-mail</span>
+                <span><v-icon class="mr-2">supervisor_account</v-icon> Novo Alias</span>
                 <v-spacer></v-spacer>
                 <v-btn slot="activator" icon @click="cancel">
                 <v-icon>close</v-icon>
@@ -10,25 +10,17 @@
             </v-card-title>
             <v-card-text>
                 <v-select
-                :items="domains"
-                label="Escolha o domínio"
-                item-text="name"
+                :items="emails"
+                label="Email de origem"
+                item-text="email"
                 item-value="id"
-                v-model="selectedDomain"
+                v-model="selectedEmail"
                 ></v-select>
             </v-card-text>
             <v-card-text>
                 <v-text-field
-                v-model="emailChosen"
-                label="E-mail"
-                :suffix="selectedDomainName"
-                ></v-text-field>
-            </v-card-text>
-            <v-card-text>
-                <v-text-field
-                v-model="passwordChosen"
-                label="Senha"
-                type="password"
+                v-model="chosenAlias"
+                label="E-mail de destino"
                 ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -46,21 +38,20 @@ export default {
   },
   data() {
     return {
-      selectedDomain: null,
-      emailChosen: null,
-      passwordChosen: null,
-      domains: [],
-      dialog: false
+      emails: [],
+      chosenAlias: null,
+      dialog: false,
+      selectedEmail: ''
     };
   },
   methods: {
-    loadDomains() {
+    loadEmails() {
       // @todo: buscar domínios da api
-      this.domains = [
-        { id: 10, name: "incluirtecnologia.com.br" },
-        { id: 1, name: "incluirtecnologia2.com.br" },
-        { id: 3, name: "incluirtecnologia3.com.br" },
-        { id: 5, name: "incluirtecnologia4.com.br" }
+      this.emails = [
+        { id: 10, email: "email1@gmail.com" },
+        { id: 1, email: "email2@gmail.com" },
+        { id: 3, email: "email3@gmail.com" },
+        { id: 5, email: "email4@gmail.com" }
       ];
     },
     accept() {
@@ -68,18 +59,6 @@ export default {
     },
     cancel() {
       this.$emit("cancel");
-    }
-  },
-  computed: {
-    selectedDomainName() {
-      if (!this.selectedDomain) {
-        return "@...";
-      }
-      return (
-        "@" +
-        this.domains[this.domains.findIndex(d => d.id === this.selectedDomain)]
-          .name
-      );
     }
   },
   created() {
@@ -93,7 +72,7 @@ export default {
       if(!this.dialog) {
         this.cancel();
       } else {
-        this.loadDomains();
+        this.loadEmails();
       }
     }
   }

@@ -1,10 +1,10 @@
 <template>
   <v-container fluid>
     <v-layout row justify-end>
-      <v-btn fab small dark color="primary">
+      <v-btn fab small dark color="primary" @click="newAliasDialog=true">
         <v-icon dark>add</v-icon>
       </v-btn>
-      <v-btn fab small dark color="error">
+      <v-btn fab small dark color="error" @click="deleteAliasDialog=true">
         <v-icon dark>remove</v-icon>
       </v-btn>
     </v-layout>
@@ -75,6 +75,16 @@
             </p>
           </v-data-table>
         </v-card>
+        <new-alias-dialog
+          :isopen="newAliasDialog"
+          @accept="newAliasDialog=false"
+          @cancel="newAliasDialog=false"
+          />
+        <delete-alias-dialog
+          :isopen="deleteAliasDialog" :aliases="['alias1@gmail.com', 'alias2@gmail.com']"
+          @accept="deleteAliasDialog=false"
+          @cancel="deleteAliasDialog=false"
+          />
       </template>
     </v-layout>
   </v-container>
@@ -83,9 +93,15 @@
 <script>
 
 import API from './../services/ApiService';
+import NewAliasDialog from './dialogs/NewAliasDialog';
+import DeleteAliasDialog from './dialogs/DeleteAliasDialog';
 
 export default {
   name: "aliases",
+  components: {
+    NewAliasDialog,
+    DeleteAliasDialog
+  },
   data() {
     return {
       search: "",
@@ -94,7 +110,9 @@ export default {
       },
       selected: [],
       headers: [{ text: "#", value: "id" }, { text: "Origem", value: "source" }, { text: "Destino", value: "destination" }],
-      aliases: []
+      aliases: [],
+      newAliasDialog: false,
+      deleteAliasDialog: false
     };
   },
   methods: {
@@ -109,7 +127,8 @@ export default {
         this.pagination.sortBy = column;
         this.pagination.descending = false;
       }
-    }
+    },
+
   },
   created() {
     this.$store.commit('setLayout', 'DashboardLayout');
