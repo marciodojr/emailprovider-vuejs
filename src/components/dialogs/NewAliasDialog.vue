@@ -15,12 +15,17 @@
                 item-text="email"
                 item-value="id"
                 v-model="selectedEmail"
+                required
                 ></v-select>
             </v-card-text>
             <v-card-text>
                 <v-text-field
                 v-model="chosenAlias"
                 label="E-mail de destino"
+                v-validate="'required|email'"
+                :error-messages="errors.collect('alias')"
+                data-vv-name="alias"
+                required
                 ></v-text-field>
             </v-card-text>
             <v-card-actions>
@@ -32,6 +37,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean
@@ -46,16 +54,17 @@ export default {
   },
   methods: {
     loadEmails() {
-      // @todo: buscar domínios da api
-      this.emails = [
-        { id: 10, email: "email1@gmail.com" },
-        { id: 1, email: "email2@gmail.com" },
-        { id: 3, email: "email3@gmail.com" },
-        { id: 5, email: "email4@gmail.com" }
-      ];
+      API.post('/virtual-users').then((response) => {
+        this.emails = response.data.data;
+      });
     },
     accept() {
-      this.$emit("accept");
+      API.post('/virtual-aliases/add', {
+        sourceId: this.selectedEmail,
+        destination: this.chosenAlias
+      }).then((resp) => {
+        this.$emit("accept", resp.data.data);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -63,6 +72,7 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

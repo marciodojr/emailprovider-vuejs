@@ -66,8 +66,8 @@
                   ></v-checkbox>
                 </td>
                 <td class="text-xs-left">{{ props.item.id }}</td>
-                <td class="text-xs-left">{{ props.item.source }}</td>
                 <td class="text-xs-left">{{ props.item.destination }}</td>
+                <td class="text-xs-left">{{ props.item.source }}</td>
               </tr>
             </template>
             <p slot="no-results" :value="true" class="text-xs-center">
@@ -77,12 +77,12 @@
         </v-card>
         <new-alias-dialog
           :isopen="newAliasDialog"
-          @accept="newAliasDialog=false"
+          @accept="addNewAlias"
           @cancel="newAliasDialog=false"
           />
         <delete-alias-dialog
-          :isopen="deleteAliasDialog" :aliases="['alias1@gmail.com', 'alias2@gmail.com']"
-          @accept="deleteAliasDialog=false"
+          :isopen="deleteAliasDialog" :aliases="selected"
+          @accept="deleteAlias"
           @cancel="deleteAliasDialog=false"
           />
       </template>
@@ -109,7 +109,7 @@ export default {
         sortBy: "id"
       },
       selected: [],
-      headers: [{ text: "#", value: "id" }, { text: "Origem", value: "source" }, { text: "Destino", value: "destination" }],
+      headers: [{ text: "#", value: "id" }, { text: "Destino", value: "destination" }, { text: "Origem", value: "source" }],
       aliases: [],
       newAliasDialog: false,
       deleteAliasDialog: false
@@ -128,7 +128,15 @@ export default {
         this.pagination.descending = false;
       }
     },
-
+    addNewAlias(alias) {
+      this.aliases.push(alias);
+      this.newAliasDialog = false;
+    },
+    deleteAlias(aliasIds) {
+      this.aliases = this.aliases.filter(a => !aliasIds.includes(a.id));
+      this.deleteAliasDialog = false;
+      this.selected = [];
+    }
   },
   created() {
     this.$store.commit('setLayout', 'DashboardLayout');

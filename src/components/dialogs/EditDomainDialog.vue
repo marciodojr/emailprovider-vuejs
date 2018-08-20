@@ -9,7 +9,7 @@
                 </v-btn>
             </v-card-title>
             <v-card-text>
-                <v-text-field :value="domain.name" label="Domínio"></v-text-field>
+                <v-text-field v-model="domainName" label="Domínio"></v-text-field>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -20,6 +20,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean,
@@ -30,12 +33,18 @@ export default {
   },
   data() {
     return {
-      dialog: false
+      dialog: false,
+      domainName: ''
     };
   },
   methods: {
     accept() {
-      this.$emit("accept");
+      API.post('/virtual-domains/edit', {
+        id: this.domain.id,
+        name: this.domainName
+      }).then(resp => {
+        this.$emit("accept", resp.data.data);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -43,6 +52,8 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    this.domainName = this.domain ? this.domain.name : '';
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent
@@ -52,6 +63,9 @@ export default {
       if(!this.dialog) {
         this.cancel();
       }
+    },
+    domain() {
+      this.domainName = this.domain ? this.domain.name : '';
     }
   }
 };

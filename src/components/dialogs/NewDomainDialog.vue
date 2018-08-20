@@ -20,6 +20,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean
@@ -32,7 +35,11 @@ export default {
   },
   methods: {
     accept() {
-      this.$emit("accept");
+      API.post('/virtual-domains/add', {
+        name: this.domain
+      }).then(resp => {
+        this.$emit("accept", resp.data.data);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -40,6 +47,7 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

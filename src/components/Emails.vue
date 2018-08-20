@@ -76,13 +76,13 @@
         </v-card>
         <new-email-dialog
           :isopen="newEmailDialog"
-          @accept="newEmailDialog=false"
+          @accept="addNewEmail"
           @cancel="newEmailDialog=false"
         />
         <delete-email-dialog
           :isopen="deleteEmailDialog"
-          :emails="selectedEmails"
-          @accept="deleteEmailDialog=false"
+          :emails="selected"
+          @accept="deleteEmail"
           @cancel="deleteEmailDialog=false"
           />
       </template>
@@ -111,8 +111,7 @@ export default {
       headers: [{ text: "#", value: "id" }, { text: "Domínio", value: "name" }],
       emails: [],
       newEmailDialog: false,
-      deleteEmailDialog: false,
-      selectedEmails: ['email1@gmail.com', 'email2@gmail.com']
+      deleteEmailDialog: false
     };
   },
   methods: {
@@ -127,6 +126,15 @@ export default {
         this.pagination.sortBy = column;
         this.pagination.descending = false;
       }
+    },
+    addNewEmail(email) {
+      this.emails.push(email);
+      this.newEmailDialog = false;
+    },
+    deleteEmail(emailIds) {
+      this.emails = this.emails.filter(e => !emailIds.includes(e.id));
+      this.deleteEmailDialog = false;
+      this.selected = [];
     }
   },
   created() {

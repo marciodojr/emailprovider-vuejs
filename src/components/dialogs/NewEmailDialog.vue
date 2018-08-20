@@ -22,6 +22,10 @@
                 v-model="emailChosen"
                 label="E-mail"
                 :suffix="selectedDomainName"
+                v-validate="'required'"
+                :error-messages="errors.collect('email')"
+                data-vv-name="email"
+                required
                 ></v-text-field>
             </v-card-text>
             <v-card-text>
@@ -40,6 +44,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean
@@ -55,16 +62,18 @@ export default {
   },
   methods: {
     loadDomains() {
-      // @todo: buscar domínios da api
-      this.domains = [
-        { id: 10, name: "incluirtecnologia.com.br" },
-        { id: 1, name: "incluirtecnologia2.com.br" },
-        { id: 3, name: "incluirtecnologia3.com.br" },
-        { id: 5, name: "incluirtecnologia4.com.br" }
-      ];
+      API.get('/virtual-domains').then(resp => {
+        this.domains = resp.data.data;
+      });
     },
     accept() {
-      this.$emit("accept");
+      API.post('/virtual-users/add', {
+        email: this.emailChosen,
+        domain: this.selectedDomain,
+        password: this.passwordChosen
+      }).then((resp) => {
+        this.$emit("accept", resp.data.data);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -84,6 +93,7 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

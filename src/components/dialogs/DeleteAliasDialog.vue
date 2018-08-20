@@ -13,7 +13,9 @@
                 <v-card-title class="subheading">Os seguintes aliases serão removidos: </v-card-title>
                 <v-list dense>
                   <v-list-tile v-for="(alias, idx) in aliases" :key="idx">
-                    <v-list-tile-content>{{alias}}</v-list-tile-content>
+                    <v-list-tile-content>{{alias.id}}</v-list-tile-content>
+                    <v-list-tile-content>{{alias.destination}}</v-list-tile-content>
+                    <v-list-tile-content>{{alias.source}}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-card>
@@ -27,6 +29,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean,
@@ -39,7 +44,12 @@ export default {
   },
   methods: {
     accept() {
-      this.$emit("accept");
+      var aliasIds = this.aliases.map(a => a.id);
+      API.post('/virtual-aliases/remove', {
+        aliases: aliasIds
+      }).then(() => {
+        this.$emit("accept", aliasIds);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -47,6 +57,7 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() {

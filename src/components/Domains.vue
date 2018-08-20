@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
     <v-layout row justify-end>
+      <v-btn fab small dark color="warning" @click="editDomainDialog=true" :disabled="selected.length != 1">
+        <v-icon dark>edit</v-icon>
+      </v-btn>
       <v-btn fab small dark color="primary" @click="newDomainDialog=true">
         <v-icon dark>add</v-icon>
-      </v-btn>
-      <v-btn fab small dark color="warning" @click="editDomainDialog=true">
-        <v-icon dark>edit</v-icon>
       </v-btn>
       <v-btn fab small dark color="error" @click="deleteDomainDialog=true">
         <v-icon dark>remove</v-icon>
@@ -79,17 +79,17 @@
         </v-card>
         <new-domain-dialog
           :isopen="newDomainDialog"
-          @accept="newDomainDialog=false"
+          @accept="addNewDomain"
           @cancel="newDomainDialog=false"
           />
         <edit-domain-dialog
-          :isopen="editDomainDialog" :domain="{id: 1, name: 'dominiolegal.com.br'}"
-          @accept="editDomainDialog=false"
+          :isopen="editDomainDialog" :domain="selected ? selected[0] : null"
+          @accept="editDomain"
           @cancel="editDomainDialog=false"
           />
         <delete-domain-dialog
-          :isopen="deleteDomainDialog" :domain="'dominiolegal.com.br'"
-          @accept="deleteDomainDialog=false"
+          :isopen="deleteDomainDialog" :domains="selected"
+          @accept="deleteDomain"
           @cancel="deleteDomainDialog=false"
           />
       </template>
@@ -114,7 +114,8 @@ export default {
     return {
       search: "",
       pagination: {
-        sortBy: "id"
+        sortBy: "id",
+        descending: true
       },
       selected: [],
       headers: [
@@ -139,6 +140,21 @@ export default {
         this.pagination.sortBy = column;
         this.pagination.descending = false;
       }
+    },
+    addNewDomain(domain) {
+      this.domains.push(domain);
+      this.newDomainDialog = false;
+    },
+    editDomain(domain) {
+      var idx = this.domains.findIndex(d => d.id == domain.id);
+      this.domains.splice(idx, 1);
+      this.domains.push(domain);
+      this.editDomainDialog = false;
+    },
+    deleteDomain(domainIds) {
+      this.domains = this.domains.filter(d => !domainIds.includes(d.id));
+      this.deleteDomainDialog = false;
+      this.selected = [];
     }
   },
   created() {

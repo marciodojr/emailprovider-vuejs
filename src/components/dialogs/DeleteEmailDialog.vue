@@ -13,7 +13,8 @@
                 <v-card-title class="subheading">Os seguintes emails serão removidos: </v-card-title>
                 <v-list dense>
                   <v-list-tile v-for="(email, idx) in emails" :key="idx">
-                    <v-list-tile-content>{{email}}</v-list-tile-content>
+                    <v-list-tile-content>{{email.id}}</v-list-tile-content>
+                    <v-list-tile-content>{{email.email}}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
               </v-card>
@@ -27,6 +28,9 @@
     </v-dialog>
 </template>
 <script>
+
+import API from './../../services/ApiService';
+
 export default {
   props: {
     isopen: Boolean,
@@ -39,7 +43,12 @@ export default {
   },
   methods: {
     accept() {
-      this.$emit("accept");
+      var emailIds = this.emails.map(e => e.id);
+      API.post('/virtual-users/remove', {
+        emails: emailIds
+      }).then(() => {
+        this.$emit("accept", emailIds);
+      });
     },
     cancel() {
       this.$emit("cancel");
@@ -47,6 +56,7 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
+    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() {
