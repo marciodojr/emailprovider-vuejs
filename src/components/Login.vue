@@ -22,6 +22,7 @@
                     label="Usuário"
                     data-vv-name="usuário"
                     required
+                    @keyup.enter="submit"
                   ></v-text-field>
                   <v-text-field
                     prepend-icon="lock"
@@ -32,6 +33,7 @@
                     label="Senha"
                     data-vv-name="senha"
                     required
+                    @keyup.enter="submit"
                     ></v-text-field>
                 </v-form>
               </v-card-text>
