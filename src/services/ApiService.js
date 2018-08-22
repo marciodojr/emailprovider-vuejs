@@ -14,8 +14,11 @@ export default {
     put(url, data) {
         return this.request('PUT', url, data);
     },
-    delete(url) {
-        return this.request('DELETE', url);
+    patch(url, data) {
+        return this.request('PATCH', url, data);
+    },
+    delete(url, data) {
+        return this.request('DELETE', url, data);
     },
     request(method, url, data = {}) {
 

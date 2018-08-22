@@ -45,7 +45,7 @@ export default {
   methods: {
     accept() {
       var aliasIds = this.aliases.map(a => a.id);
-      API.post('/virtual-aliases/remove', {
+      API.delete('/virtual-aliases', {
         aliases: aliasIds
       }).then(() => {
         this.$emit("accept", aliasIds);

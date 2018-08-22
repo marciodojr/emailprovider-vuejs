@@ -54,12 +54,12 @@ export default {
   },
   methods: {
     loadEmails() {
-      API.post('/virtual-users').then((response) => {
+      API.get('/virtual-users').then((response) => {
         this.emails = response.data.data;
       });
     },
     accept() {
-      API.post('/virtual-aliases/add', {
+      API.post('/virtual-aliases', {
         sourceId: this.selectedEmail,
         destination: this.chosenAlias
       }).then((resp) => {

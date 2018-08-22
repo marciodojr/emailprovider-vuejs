@@ -67,7 +67,7 @@ export default {
       });
     },
     accept() {
-      API.post('/virtual-users/add', {
+      API.post('/virtual-users', {
         email: this.emailChosen,
         domain: this.selectedDomain,
         password: this.passwordChosen

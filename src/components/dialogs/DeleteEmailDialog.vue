@@ -44,7 +44,7 @@ export default {
   methods: {
     accept() {
       var emailIds = this.emails.map(e => e.id);
-      API.post('/virtual-users/remove', {
+      API.delete('/virtual-users', {
         emails: emailIds
       }).then(() => {
         this.$emit("accept", emailIds);

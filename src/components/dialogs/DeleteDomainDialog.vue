@@ -44,7 +44,7 @@ export default {
   methods: {
     accept() {
       var domainIds = this.domains.map(d => d.id);
-      API.post('/virtual-domains/remove', {
+      API.delete('/virtual-domains', {
         domains: domainIds
       }).then(() => {
         this.$emit("accept", domainIds);

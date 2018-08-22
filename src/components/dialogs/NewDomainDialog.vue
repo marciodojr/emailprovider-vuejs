@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     accept() {
-      API.post('/virtual-domains/add', {
+      API.post('/virtual-domains', {
         name: this.domain
       }).then(resp => {
         this.$emit("accept", resp.data.data);

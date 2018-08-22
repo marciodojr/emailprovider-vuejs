@@ -39,8 +39,7 @@ export default {
   },
   methods: {
     accept() {
-      API.post('/virtual-domains/edit', {
-        id: this.domain.id,
+      API.patch('/virtual-domains/' + this.domain.id, {
         name: this.domainName
       }).then(resp => {
         this.$emit("accept", resp.data.data);
