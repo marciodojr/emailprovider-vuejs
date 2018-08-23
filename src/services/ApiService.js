@@ -27,7 +27,7 @@ export default {
         };
 
         if(this.token) {
-            headers['x-token'] = this.token;
+            headers['Authorization'] = 'Bearer ' + this.token;
         }
 
         return axios(API_URL + url, {
