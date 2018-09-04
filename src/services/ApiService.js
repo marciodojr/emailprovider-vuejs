@@ -1,5 +1,4 @@
 import axios from 'axios';
-import qs from 'qs';
 
 const API_URL = process.env.VUE_APP_BASE_URI;
 
@@ -22,9 +21,7 @@ export default {
     },
     request(method, url, data = {}) {
 
-        var headers = {
-            'content-type': 'application/x-www-form-urlencoded'
-        };
+        var headers = {};
 
         if(this.token) {
             headers['Authorization'] = 'Bearer ' + this.token;
@@ -32,7 +29,7 @@ export default {
 
         return axios(API_URL + url, {
           method: method,
-          data: qs.stringify(data),
+          data: data,
           headers
         });
     }
