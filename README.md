@@ -19,3 +19,8 @@ npm run build
 ```
 npm run lint
 ```
+
+### Build docker image
+```
+docker build . -t emailprovider-app --no-cache
+```
