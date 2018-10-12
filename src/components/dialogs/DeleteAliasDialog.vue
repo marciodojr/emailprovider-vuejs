@@ -30,8 +30,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean,
@@ -45,7 +43,7 @@ export default {
   methods: {
     accept() {
       var aliasIds = this.aliases.map(a => a.id);
-      API.delete('/virtual-aliases', {
+      this.$api.delete('/virtual-aliases', {
         aliases: aliasIds
       }).then(() => {
         this.$emit("accept", aliasIds);
@@ -57,7 +55,6 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() {

@@ -21,8 +21,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean,
@@ -39,7 +37,7 @@ export default {
   },
   methods: {
     accept() {
-      API.patch('/virtual-domains/' + this.domain.id, {
+      this.$api.patch('/virtual-domains/' + this.domain.id, {
         name: this.domainName
       }).then(resp => {
         this.$emit("accept", resp.data.data);
@@ -52,7 +50,6 @@ export default {
   created() {
     this.dialog = this.isopen;
     this.domainName = this.domain ? this.domain.name : '';
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

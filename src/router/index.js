@@ -14,7 +14,8 @@ const routes = [
   { path: "/dominios", name: "domains", component: Domains },
   { path: "/aliases", name: "aliases", component: Aliases },
   { path: "/emails", name: "emails", component: Emails },
-  { path: "*", name: "404", component: PageNotFound }
+  { path: "*", name: "404", component: PageNotFound },
+  { path: "*", name: "403", component: PageNotFound }
 ];
 
 const router = new VueRouter({

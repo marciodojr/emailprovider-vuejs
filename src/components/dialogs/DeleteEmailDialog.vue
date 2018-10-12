@@ -29,8 +29,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean,
@@ -44,7 +42,7 @@ export default {
   methods: {
     accept() {
       var emailIds = this.emails.map(e => e.id);
-      API.delete('/virtual-users', {
+      this.$api.delete('/virtual-users', {
         emails: emailIds
       }).then(() => {
         this.$emit("accept", emailIds);
@@ -56,7 +54,6 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() {

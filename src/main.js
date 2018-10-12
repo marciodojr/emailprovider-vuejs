@@ -5,6 +5,7 @@ import './validator';
 import App from './App.vue';
 import { store } from './store';
 import { router } from './router';
+import './services/ApiService';
 
 Vue.config.productionTip = false
 

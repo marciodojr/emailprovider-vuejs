@@ -45,8 +45,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean
@@ -62,12 +60,12 @@ export default {
   },
   methods: {
     loadDomains() {
-      API.get('/virtual-domains').then(resp => {
+      this.$api.get('/virtual-domains').then(resp => {
         this.domains = resp.data.data;
       });
     },
     accept() {
-      API.post('/virtual-users', {
+      this.$api.post('/virtual-users', {
         email: this.emailChosen,
         domain: this.selectedDomain,
         password: this.passwordChosen
@@ -93,7 +91,6 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

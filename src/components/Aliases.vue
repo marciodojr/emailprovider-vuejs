@@ -92,7 +92,6 @@
 
 <script>
 
-import API from './../services/ApiService';
 import NewAliasDialog from './dialogs/NewAliasDialog';
 import DeleteAliasDialog from './dialogs/DeleteAliasDialog';
 
@@ -140,8 +139,7 @@ export default {
   },
   created() {
     this.$store.commit('setLayout', 'DashboardLayout');
-    API.token = this.$store.getters.authToken;
-    API.get('/virtual-aliases').then(resp => {
+    this.$api.get('/virtual-aliases').then(resp => {
       this.aliases = resp.data.data;
     });
   }

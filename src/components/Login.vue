@@ -51,8 +51,6 @@
 
 <script>
 
-import API from './../services/ApiService';
-
 export default {
   name: "login",
   data() {
@@ -69,7 +67,7 @@ export default {
 
       if (this.isFormValid) {
         this.showProgress = true;
-        API.post('/user/login', {
+        this.$api.post('/user/login', {
           username: this.username,
           password: this.password
         }).then(response => {

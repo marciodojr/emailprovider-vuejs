@@ -98,7 +98,6 @@
 </template>
 <script>
 
-import API from './../services/ApiService';
 import NewDomainDialog from './dialogs/NewDomainDialog';
 import EditDomainDialog from './dialogs/EditDomainDialog';
 import DeleteDomainDialog from './dialogs/DeleteDomainDialog';
@@ -159,8 +158,7 @@ export default {
   },
   created() {
     this.$store.commit('setLayout', 'DashboardLayout');
-    API.token = this.$store.getters.authToken;
-    API.get('/virtual-domains').then(resp => {
+    this.$api.get('/virtual-domains').then(resp => {
       this.domains = resp.data.data;
     });
   }

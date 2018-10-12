@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import API from "./../services/ApiService";
 import NewEmailDialog from "./dialogs/NewEmailDialog";
 import DeleteEmailDialog from "./dialogs/DeleteEmailDialog";
 
@@ -139,8 +138,7 @@ export default {
   },
   created() {
     this.$store.commit("setLayout", "DashboardLayout");
-    API.token = this.$store.getters.authToken;
-    API.get("/virtual-users").then(resp => {
+    this.$api.get("/virtual-users").then(resp => {
       this.emails = resp.data.data;
     });
   }

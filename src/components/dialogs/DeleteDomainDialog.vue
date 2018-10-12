@@ -29,8 +29,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean,
@@ -44,7 +42,7 @@ export default {
   methods: {
     accept() {
       var domainIds = this.domains.map(d => d.id);
-      API.delete('/virtual-domains', {
+      this.$api.delete('/virtual-domains', {
         domains: domainIds
       }).then(() => {
         this.$emit("accept", domainIds);
@@ -56,7 +54,6 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent

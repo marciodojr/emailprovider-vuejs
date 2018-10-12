@@ -38,8 +38,6 @@
 </template>
 <script>
 
-import API from './../../services/ApiService';
-
 export default {
   props: {
     isopen: Boolean
@@ -54,12 +52,12 @@ export default {
   },
   methods: {
     loadEmails() {
-      API.get('/virtual-users').then((response) => {
+      this.$api.get('/virtual-users').then((response) => {
         this.emails = response.data.data;
       });
     },
     accept() {
-      API.post('/virtual-aliases', {
+      this.$api.post('/virtual-aliases', {
         sourceId: this.selectedEmail,
         destination: this.chosenAlias
       }).then((resp) => {
@@ -72,7 +70,6 @@ export default {
   },
   created() {
     this.dialog = this.isopen;
-    API.token = this.$store.getters.authToken;
   },
   watch: {
     isopen() { // changes from parent
